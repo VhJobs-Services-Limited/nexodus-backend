@@ -8,14 +8,15 @@
         "php": "^8.2",
         "laravel/framework": "^11.0",
         "laravel/passport": "^12.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "opcodesio/log-viewer": "^3.8",
-        "ovac/idoc": "^1.6",
         "spatie/laravel-permission": "^6.4",
         "spatie/laravel-query-builder": "^5.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "knuckleswtf/scribe": "^4.35",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
