@@ -12,7 +12,8 @@
         "laravel/tinker": "^2.9",
         "opcodesio/log-viewer": "^3.8",
         "spatie/laravel-permission": "^6.4",
-        "spatie/laravel-query-builder": "^5.8"
+        "spatie/laravel-query-builder": "^5.8",
+        "spatie/laravel-responsecache": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
