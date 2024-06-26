@@ -12,8 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
+            logger(base_path('routes/api/v1.php'));
             Route::middleware('api')
             ->prefix('api/v1')
+            ->name('api.')
             ->group(base_path('routes/api/v1.php'));
         }
     )
