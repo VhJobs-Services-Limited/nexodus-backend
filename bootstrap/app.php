@@ -18,7 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->api([
+            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+        ]);
+        $middleware->alias([
+            'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
