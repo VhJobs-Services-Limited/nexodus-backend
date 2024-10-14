@@ -12,7 +12,8 @@
         "opcodesio/log-viewer": "^3.8",
         "spatie/laravel-permission": "^6.4",
         "spatie/laravel-query-builder": "^5.8",
-        "spatie/laravel-responsecache": "*"
+        "spatie/laravel-responsecache": "*",
+        "wendelladriel/laravel-validated-dto": "^3.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
