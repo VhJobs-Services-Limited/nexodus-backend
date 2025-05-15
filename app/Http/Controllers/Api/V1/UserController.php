@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
@@ -11,7 +13,7 @@ use Illuminate\Http\Request;
  *
  * APIs for managing users
  */
-class UserController extends Controller
+final class UserController extends Controller
 {
     /**
      * Get Users
@@ -31,7 +33,6 @@ class UserController extends Controller
      *      "message": "No query results for model"
      * }
      */
-
     public function index()
     {
         //

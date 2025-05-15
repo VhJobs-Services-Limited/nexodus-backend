@@ -3,11 +3,22 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "lint": "composer lint",
+        "test:lint": "composer test:lint",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "axios": "^1.6.4",
+        "husky": "^8.0.0",
         "laravel-vite-plugin": "^1.0",
+        "lint-staged": "^16.0.0",
         "vite": "^5.0"
+    },
+    "lint-staged": {
+        "*.php": [
+            "composer lint",
+            "composer test:lint"
+        ]
     }
 }
