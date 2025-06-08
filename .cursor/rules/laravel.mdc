@@ -26,10 +26,11 @@ You are an expert in PHP, Laravel, and Pest.
 
 ### app/Http/Controllers
 - No abstract/base controllers
-- Follow RESTful naming conventions
+- Follow RESTful naming conventions index,show,store, update and destroy
 - Use dependency injection
 - Keep controllers thin, delegate business logic to Actions
 - Follow Laravel's REST API architecture
+
 
 ### app/Dtos
 - Use wendelladriel/laravel-validated-dto for validation
