@@ -1,0 +1,67 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use App\Dtos\Create{{ model }}Dto;
+use App\Dtos\Update{{ model }}Dto;
+use App\Http\Resources\{{ model }}Resource;
+use App\Http\Resources\{{ model }}Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Spatie\QueryBuilder\QueryBuilder;
+
+class {{ class }}
+{
+    /**
+     * Get all {{ model }}
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $data = QueryBuilder::for({{ model }}::class)
+            ->allowedFilters([])
+            ->allowedIncludes([])
+            ->withLimit($request)
+            ->withPagination($request);
+
+        return $request->has('paginate') ? (new {{ model }}Collection($data))->response() : {{ model }}Resource::collection($data)->response();
+    }
+
+    /**
+     * Create new {{ model }}
+     */
+    public function store(Create{{ model }}Dto $dto): JsonResponse
+    {
+        return response()->json()->setStatusCode(201);
+    }
+
+    /**
+     * Get {{ model }} by id
+     */
+    public function show({{ model }} ${{ modelVariable }}): JsonResponse
+    {
+       $data = QueryBuilder::for({{ model }}::class)
+            ->allowedIncludes([])
+            ->findOrFail(${{ modelVariable }});
+
+        return {{ model }}Resource::make($data)->response();
+    }
+
+    /**
+     * Update {{ model }} by id
+     */
+    public function update(Update{{ model }}Dto $dto, {{ model }} ${{ modelVariable }}): JsonResponse
+    {
+         return response()->json();
+    }
+
+    /**
+     * Delete {{ model }} by id
+     */
+    public function destroy({{ model }} ${{ modelVariable }}): Response
+    {
+        ${{ modelVariable }}->delete();
+        return response()->noContent();
+    }
+}

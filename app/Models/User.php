@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -15,17 +17,15 @@ final class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Get the route key for the model.
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -34,7 +34,6 @@ final class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -46,7 +45,12 @@ final class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'blocked_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'is_blocked' => 'boolean',
         ];
     }
 }

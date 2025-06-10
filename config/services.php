@@ -33,4 +33,16 @@ return [
         ],
     ],
 
+    'sendpulse' => [
+        'base_url' => env('SENDPULSE_BASE_URL', ''),
+        'secret' => env('SENDPULSE_SECRET', ''),
+        'client_id' => env('SENDPULSE_CLIENT_ID', ''),
+        'sender' => env('SENDPULSE_SENDER'),
+        'sender_name' => env('SENDPULSE_SENDER_NAME', env('APP_NAME')),
+        'templates' => array_map(function (string $item) {
+            $template = explode(':', $item);
+
+            return ['key' => $template[0] ?? null, 'value' => $template[1] ?? null];
+        }, [...array_filter(explode(',', env('SENDPULSE_TEMPLATE', '')))]),
+    ],
 ];

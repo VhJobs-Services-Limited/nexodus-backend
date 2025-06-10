@@ -1,0 +1,81 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Test Rules
+
+## 1. Test Structure
+- Use Pest PHP for all tests
+- Follow directory structure:
+  - Console: tests/Feature/Console
+  - Controllers: tests/Feature/Http
+  - Actions: tests/Unit/Actions
+  - Models: tests/Unit/Models
+  - Jobs: tests/Unit/Jobs
+
+## 2. Test Naming
+- Use `it_test_name` format instead of `test_test_name`
+- Name should clearly describe what is being tested
+- Example: `it_verifies_email_with_valid_code`
+
+## 3. Test Organization
+- Group related tests using `describe` blocks
+- Use `beforeEach` for common setup
+- Keep tests focused and atomic
+- One assertion per test when possible
+
+## 4. Test Data
+- Use factories for test data
+- Generate a {Model}Factory with each model when neccessary
+- Use meaningful test data
+- Avoid hardcoding test values
+
+## 5. Assertions
+- You must use Pest functions for assertion methods
+- Assert both success and failure cases
+- Test edge cases and error conditions
+- Verify database state when necessary
+
+## 6. Test Coverage
+- All code must be tested
+- Don't remove tests without approval
+- Run full test suite before committing
+- Ensure all files are being tested
+
+## 7. Best Practices
+- Keep tests independent
+- Clean up test data after each test
+- Use database transactions when appropriate
+- Mock external services
+- Use proper test doubles (stubs, mocks, spies)
+
+## 8. Code Quality
+- Write readable and maintainable tests
+- Follow DRY principle
+- Use meaningful variable names
+- Add comments for complex test scenarios
+
+## 9. Running Tests
+- Run `composer test` before finalizing
+- Run `composer lint` after changes
+- Fix failing tests before committing
+- Monitor test coverage
+
+## 10. Test Types
+- Unit Tests: Test individual components
+- Feature Tests: Test complete features
+- Integration Tests: Test component interactions
+- Browser Tests: Test user interactions (Dusk)
+
+## 11. Test Environment
+- Use test database
+- Reset database state between tests
+- Use proper environment variables
+- Mock external services
+
+## 12. Test Documentation
+- Document complex test scenarios
+- Explain test data setup
+- Document test dependencies
+- Keep test documentation up to date

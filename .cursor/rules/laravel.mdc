@@ -71,6 +71,7 @@ public function store(CreateTodoRequest $request, CreateTodoAction $action)
 - Generate a {Model}Factory with each model
 - Use Laravel's built-in testing tools (PHPUnit, Dusk) for unit and feature tests
 - Make sure all files are being tested
+- Make sure to use it_test_name rather than test_test_name
 
 ## 3.1 Test Directory Structure
 - Console: tests/Feature/Console

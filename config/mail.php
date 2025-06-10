@@ -84,6 +84,10 @@ return [
             ],
         ],
 
+        'custom' => [
+            'transport' => 'custom',
+        ],
+
     ],
 
     /*

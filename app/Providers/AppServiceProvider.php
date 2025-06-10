@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Mail\Transport\CustomEmailTransport;
+use App\Models\PersonalAccessToken;
+use App\Services\Mail\SendpulseService;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -24,9 +32,13 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Mail::extend('custom', fn () => new CustomEmailTransport(new SendpulseService()));
+
         $this->configureCommands();
         $this->configureModels();
         $this->configureQueryLog();
+        $this->configureRateLimit();
+        $this->configureSanctumPersonalAccessToken();
     }
 
     /**
@@ -79,8 +91,20 @@ final class AppServiceProvider extends ServiceProvider
         });
     }
 
+    private function configureRateLimit()
+    {
+        RateLimiter::for('otp', fn (Request $request) => Limit::perMinute(3)->by($request->string('email') ?: $request->ip()));
+    }
+
+    private function configureSanctumPersonalAccessToken(): void
+    {
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+    }
+
     /**
      * configure application's role and permissions
      */
-    private function configureRoleAndPermissions(): void {}
+    private function configureRoleAndPermissions(): void
+    {
+    }
 }

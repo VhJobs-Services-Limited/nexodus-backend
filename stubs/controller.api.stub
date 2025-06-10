@@ -1,0 +1,61 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Spatie\QueryBuilder\QueryBuilder;
+
+class {{ class }}
+{
+    /**
+     * Get all 
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $data = QueryBuilder::for('')
+            ->allowedFilters([])
+            ->allowedIncludes([])
+            ->withLimit($request)
+            ->withPagination($request);
+
+      return $request->has('paginate') ? (new Collection($data))->response() : Resource::collection($data)->response();
+    }
+
+    /**
+     * Create new
+     */
+    public function store(Request $request): JsonResponse
+    {
+        return response()->json([])->setStatusCode(201);
+    }
+
+    /**
+     * Get by id
+     */
+    public function show(string $id): JsonResponse
+    {
+       $data = QueryBuilder::for('')
+            ->allowedIncludes([])
+            ->findOrFail($id);
+
+        return Resources::make($data)->response();
+    }
+
+    /**
+     * Update by id
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        return response()->json();
+    }
+
+    /**
+     * Delete by id
+     */
+    public function destroy(string $id): Response
+    {
+        return response()->noContent();
+    }
+}
