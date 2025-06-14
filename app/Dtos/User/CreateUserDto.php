@@ -15,6 +15,7 @@ final class CreateUserDto extends BaseDto
     public string $email;
     public string $password;
     public ?string $country;
+    public ?string $referral_by;
 
     protected function rules(): array
     {
@@ -25,6 +26,7 @@ final class CreateUserDto extends BaseDto
             'email' => ['required', 'email', 'unique:users,email', Rule::exists('email_verifications', 'email')->whereNotNull('verified_at')],
             'password' => ['required', 'string', 'min:8', 'max:100'],
             'country' => ['required', 'string', 'max:10'],
+            'referral_by' => ['nullable', 'string', 'max:255', 'exists:users,referral_code'],
         ];
     }
 

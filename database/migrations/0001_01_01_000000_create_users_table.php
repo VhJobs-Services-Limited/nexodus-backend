@@ -23,6 +23,9 @@ return new class () extends Migration {
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
+            $table->string('referral_code')->unique()->default(strtolower(Str::random(8)));
+            $table->string('referral_by')->nullable()->index();
+            $table->integer('referral_count')->default(0);
             $table->timestamp('last_login_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_blocked')->default(false);

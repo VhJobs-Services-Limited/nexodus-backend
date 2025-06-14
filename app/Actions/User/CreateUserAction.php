@@ -22,6 +22,9 @@ final class CreateUserAction
                 'email_verified_at' => $verification->verified_at,
             ]));
 
+            when($dto->referral_by, fn () => User::query()
+            ->where('referral_code', $dto->referral_by)->increment('referral_count'));
+
             $verification->delete();
 
             Mail::to($user->email)->queue(new WelcomeMail($user));
