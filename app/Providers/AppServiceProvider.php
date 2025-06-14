@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 
@@ -68,6 +69,9 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function configureModels(): void
     {
+
+        Schema::defaultStringLength(190);
+
         Model::shouldBeStrict();
 
         Model::unguard();
