@@ -14,4 +14,6 @@ interface EmailProviderInterface
     public function getProviderName(): string;
 
     public function buildPayload(Email $email): array;
+
+    public function hasTemplateMail(): bool;
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Mail\EmailProviderInterface;
 use App\Mail\Transport\CustomEmailTransport;
 use App\Models\PersonalAccessToken;
-use App\Services\Mail\SendpulseService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
@@ -25,7 +25,11 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
+        $this->app->bind(EmailProviderInterface::class, function ($app): EmailProviderInterface {
+            $providerClass = config('services.providers.email.services')[config('services.providers.email.default')];
+            return $app->make($providerClass);
+        });
     }
 
     /**
@@ -33,7 +37,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Mail::extend('custom', fn () => new CustomEmailTransport(new SendpulseService()));
+        Mail::extend('custom', fn () => new CustomEmailTransport(app(EmailProviderInterface::class)));
 
         $this->configureCommands();
         $this->configureModels();

@@ -33,6 +33,16 @@ return [
         ],
     ],
 
+     'providers' => [
+        'email' => [
+            'default' => env('EMAIL_PROVIDER', 'ahasend'),
+            'services' => [
+                'ahasend' => App\Services\Mail\AhaSendService::class,
+                'sendpulse' => App\Services\Mail\SendpulseService::class,
+            ],
+        ],
+    ],
+
     'sendpulse' => [
         'base_url' => env('SENDPULSE_BASE_URL', ''),
         'secret' => env('SENDPULSE_SECRET', ''),
@@ -44,5 +54,12 @@ return [
 
             return ['key' => $template[0] ?? null, 'value' => $template[1] ?? null];
         }, [...array_filter(explode(',', env('SENDPULSE_TEMPLATE', '')))]),
+    ],
+
+    'ahasend' => [
+        'base_url' => env('AHASEND_BASE_URL', ''),
+        'api_key' => env('AHASEND_API_KEY'),
+        'sender' => env('AHASEND_SENDER', 'no-reply@vhjobs.xyz'),
+        'sender_name' => env('AHASEND_SENDER_NAME', env('APP_NAME')),
     ],
 ];

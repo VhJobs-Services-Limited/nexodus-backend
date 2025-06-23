@@ -90,4 +90,9 @@ final class SendpulseService implements EmailProviderInterface
 
         return $attachments;
     }
+
+    public function hasTemplateMail(): bool
+    {
+        return true;
+    }
 }
