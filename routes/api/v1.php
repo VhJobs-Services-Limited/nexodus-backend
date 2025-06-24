@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\ChangePasswordController;
+use App\Http\Controllers\Api\V1\DeleteAccountController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ResetPasswordController;
 use App\Http\Controllers\Api\V1\LoginController;
@@ -33,4 +35,7 @@ Route::post('login', LoginController::class)->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth', [UserController::class, 'index'])->name('auth');
+    Route::patch('auth', [UserController::class, 'update'])->name('auth.update');
+    Route::patch('auth/change-password', ChangePasswordController::class)->name('auth.change-password');
+    Route::post('auth/trash', DeleteAccountController::class)->name('auth.trash');
 });

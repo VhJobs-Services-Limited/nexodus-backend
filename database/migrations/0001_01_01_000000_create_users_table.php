@@ -33,6 +33,7 @@ return new class () extends Migration {
             $table->string('country', 10)->index();
             $table->string('pin')->nullable();
             $table->string('device_token')->nullable();
+            $table->string('reason_for_deletion')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

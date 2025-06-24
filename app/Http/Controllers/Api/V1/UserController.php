@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\User\CreateUserAction;
+use App\Actions\User\UpdateUserAction;
 use App\Dtos\User\CreateUserDto;
+use App\Dtos\User\UpdateUserDto;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,27 +37,11 @@ final class UserController
         ], Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function update(UpdateUserDto $dto, UpdateUserAction $action): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        return response()->json([
+            'message' => 'User updated successfully',
+            'data' => UserResource::make($action->handle(request()->user(), $dto)),
+        ]);
     }
 }
