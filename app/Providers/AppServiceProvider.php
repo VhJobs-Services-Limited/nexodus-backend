@@ -28,6 +28,7 @@ final class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(EmailProviderInterface::class, function ($app): EmailProviderInterface {
             $providerClass = config('services.providers.email.services')[config('services.providers.email.default')];
+
             return $app->make($providerClass);
         });
     }
@@ -112,7 +113,5 @@ final class AppServiceProvider extends ServiceProvider
     /**
      * configure application's role and permissions
      */
-    private function configureRoleAndPermissions(): void
-    {
-    }
+    private function configureRoleAndPermissions(): void {}
 }

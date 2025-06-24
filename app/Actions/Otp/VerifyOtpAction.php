@@ -8,7 +8,7 @@ use App\Models\Otp;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-final class VerifyOtp
+final class VerifyOtpAction
 {
     /**
      * Verify Otp

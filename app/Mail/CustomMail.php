@@ -16,20 +16,18 @@ abstract class CustomMail extends Mailable
     use SerializesModels;
     use UsesEmailTemplate;
 
-    public function __construct(public array $payload)
-    {
-    }
+    public function __construct(public array $payload) {}
 
-    public function build()
+    final public function build()
     {
         $emailProvider = app(EmailProviderInterface::class);
         $hasTemplateMail = $emailProvider->hasTemplateMail();
 
-        if (!$hasTemplateMail) {
+        if (! $hasTemplateMail) {
             return $this;
         }
 
-        if (!isset($this->payload['template'])) {
+        if (! isset($this->payload['template'])) {
             return $this;
         }
 

@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 final class EmailVerificationMail extends CustomMail
 {
     public $emailVerification;
+
     public function __construct(EmailVerification $emailVerification)
     {
         $this->emailVerification = $emailVerification;

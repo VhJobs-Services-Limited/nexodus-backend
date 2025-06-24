@@ -20,14 +20,6 @@ final class User extends Authenticatable
     use SoftDeletes;
 
     /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'ulid';
-    }
-
-    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
@@ -35,6 +27,22 @@ final class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
+
+    protected static function booted(): void
+    {
+        self::updating(function (self $model) {
+            $id = explode('|', request()->bearerToken())[0];
+            rescue(fn () => cache()->store('file')->forget("PersonalAccessToken::$id::tokenable"));
+        });
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -49,6 +57,7 @@ final class User extends Authenticatable
             'last_login_at' => 'datetime',
             'blocked_at' => 'datetime',
             'password' => 'hashed',
+            'pin' => 'hashed',
             'is_active' => 'boolean',
             'is_blocked' => 'boolean',
         ];

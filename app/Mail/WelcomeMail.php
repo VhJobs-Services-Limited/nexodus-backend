@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 final class WelcomeMail extends CustomMail
 {
     public $user;
+
     public function __construct(User $user)
     {
         $this->user = $user;

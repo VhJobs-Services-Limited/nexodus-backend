@@ -23,7 +23,7 @@ final class CreateUserAction
             ]));
 
             when($dto->referral_by, fn () => User::query()
-            ->where('referral_code', $dto->referral_by)->increment('referral_count'));
+                ->where('referral_code', $dto->referral_by)->increment('referral_count'));
 
             $verification->delete();
 

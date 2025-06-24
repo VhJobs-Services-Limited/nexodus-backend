@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\ChangePasswordController;
+use App\Http\Controllers\Api\V1\CreateTransactionPinController;
 use App\Http\Controllers\Api\V1\DeleteAccountController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ResetPasswordController;
+use App\Http\Controllers\Api\V1\InitiateCreateTransactionPinController;
 use App\Http\Controllers\Api\V1\LoginController;
 use App\Http\Controllers\Api\V1\Registration\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Registration\UsernameSuggestionController;
@@ -26,7 +28,6 @@ Route::patch('reset-password', ResetPasswordController::class)->name('reset.pass
 
 Route::patch('verify-otp', VerifyOtpController::class)->name('verify.otp');
 
-
 Route::get('username-suggestions/{username}', UsernameSuggestionController::class)->name('username.suggestions');
 
 Route::post('register', [UserController::class, 'store']);
@@ -35,7 +36,14 @@ Route::post('login', LoginController::class)->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth', [UserController::class, 'index'])->name('auth');
+
     Route::patch('auth', [UserController::class, 'update'])->name('auth.update');
+
     Route::patch('auth/change-password', ChangePasswordController::class)->name('auth.change-password');
+
     Route::post('auth/trash', DeleteAccountController::class)->name('auth.trash');
+
+    Route::post('transaction-pin', CreateTransactionPinController::class)->name('create.transaction.pin');
+
+    Route::post('initiate-transaction-pin', InitiateCreateTransactionPinController::class)->name('initiate.transaction.pin');
 });

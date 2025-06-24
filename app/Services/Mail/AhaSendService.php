@@ -19,7 +19,7 @@ final class AhaSendService implements EmailProviderInterface
     public function send(array $payload): Collection
     {
         $response = Http::withHeader('X-Api-Key', $this->getAccessToken())
-        ->acceptJson()->post(config('services.ahasend.base_url').'/v1/email/send', $payload);
+            ->acceptJson()->post(config('services.ahasend.base_url').'/v1/email/send', $payload);
 
         return $response->collect();
     }
@@ -39,6 +39,11 @@ final class AhaSendService implements EmailProviderInterface
         $payload['content']['attachments'] = $this->formatAttachments($email);
 
         return $payload;
+    }
+
+    public function hasTemplateMail(): bool
+    {
+        return false;
     }
 
     private function getAccessToken(): ?string
@@ -72,10 +77,5 @@ final class AhaSendService implements EmailProviderInterface
         }
 
         return $attachments;
-    }
-
-    public function hasTemplateMail(): bool
-    {
-        return false;
     }
 }

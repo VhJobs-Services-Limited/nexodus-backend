@@ -33,7 +33,7 @@ return [
         ],
     ],
 
-     'providers' => [
+    'providers' => [
         'email' => [
             'default' => env('EMAIL_PROVIDER', 'ahasend'),
             'services' => [

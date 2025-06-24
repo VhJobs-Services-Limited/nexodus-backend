@@ -51,6 +51,11 @@ final class SendpulseService implements EmailProviderInterface
         return $payload;
     }
 
+    public function hasTemplateMail(): bool
+    {
+        return true;
+    }
+
     private function getAccessToken(): ?string
     {
         return cache()->remember(self::CACHE_KEY, self::CACHE_TTL, function () {
@@ -89,10 +94,5 @@ final class SendpulseService implements EmailProviderInterface
         }
 
         return $attachments;
-    }
-
-    public function hasTemplateMail(): bool
-    {
-        return true;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Actions\Otp\VerifyOtp;
+use App\Actions\Otp\VerifyOtpAction;
 use App\Dtos\VerifyOtpDto;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final class VerifyOtpController extends Controller
 {
-    public function __invoke(VerifyOtpDto $dto, VerifyOtp $verifyOtp)
+    public function __invoke(VerifyOtpDto $dto, VerifyOtpAction $verifyOtp)
     {
         $email = $dto->email;
 

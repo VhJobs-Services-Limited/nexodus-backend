@@ -16,7 +16,7 @@ final class UsernameSuggestionController
      */
     public function __invoke(string $username): Response
     {
-        if (strlen($username) < 3) {
+        if (mb_strlen($username) < 3) {
             throw new BadRequestHttpException('Username must be at least 3 characters long');
         }
 
@@ -53,19 +53,19 @@ final class UsernameSuggestionController
         $possibleSuggestions = collect([
             $baseUsername,
             // Simple number combinations
-            ...collect(range(1, 2))->map(fn ($num) => strtolower("$baseUsername$num")),
+            ...collect(range(1, 2))->map(fn ($num) => mb_strtolower("$baseUsername$num")),
             // Creative combinations
-            strtolower("{$firstWord}_official"),
-            strtolower("{$firstWord}_verified"),
-            strtolower("{$firstWord}_pro"),
-            strtolower("real_{$firstWord}"),
-            strtolower("the_{$firstWord}"),
+            mb_strtolower("{$firstWord}_official"),
+            mb_strtolower("{$firstWord}_verified"),
+            mb_strtolower("{$firstWord}_pro"),
+            mb_strtolower("real_{$firstWord}"),
+            mb_strtolower("the_{$firstWord}"),
             // Underscore combinations
-            ...collect(range(1, 2))->map(fn ($num) => strtolower("{$firstWord}_{$num}")),
-            ...collect(range(1, 2))->map(fn ($num) => strtolower("{$firstWord}_user_{$num}")),
+            ...collect(range(1, 2))->map(fn ($num) => mb_strtolower("{$firstWord}_{$num}")),
+            ...collect(range(1, 2))->map(fn ($num) => mb_strtolower("{$firstWord}_user_{$num}")),
             // Random string combinations
-            ...collect(range(1, 2))->map(fn () => strtolower("{$firstWord}_" . Str::random(4))),
-            ...collect(range(1, 2))->map(fn () => strtolower(Str::random(4)) . "_{$firstWord}"),
+            ...collect(range(1, 2))->map(fn () => mb_strtolower("{$firstWord}_".Str::random(4))),
+            ...collect(range(1, 2))->map(fn () => mb_strtolower(Str::random(4))."_{$firstWord}"),
         ]);
 
         $existingUsernames = User::whereIn('username', $possibleSuggestions)

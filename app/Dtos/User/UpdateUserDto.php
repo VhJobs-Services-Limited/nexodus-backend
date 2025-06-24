@@ -17,7 +17,7 @@ final class UpdateUserDto extends BaseDto
     {
         return [
             'fullname' => ['sometimes', 'string', 'max:255'],
-            'phone_number' => ['sometimes', 'string', "phone:".request('country'), Rule::unique('users', 'phone_number')->ignore(request()->user()?->id)],
+            'phone_number' => ['sometimes', 'string', 'phone:'.request('country'), Rule::unique('users', 'phone_number')->ignore(request()->user()?->id)],
             'country' => ['sometimes', 'string', 'max:10'],
         ];
     }

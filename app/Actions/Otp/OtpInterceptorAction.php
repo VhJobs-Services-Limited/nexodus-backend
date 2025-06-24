@@ -8,12 +8,12 @@ use App\Models\Otp;
 use Closure;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-final class OtpInterceptor
+final class OtpInterceptorAction
 {
     /**
      * Otp interceptor
      */
-    public function execute(string $email, string $actionClass, ?Closure $callback = null): void
+    public function handle(string $email, string $actionClass, ?Closure $callback = null): void
     {
         $otp = Otp::select('id', 'updated_at', 'code', 'verified_at')
             ->where('email', $email)

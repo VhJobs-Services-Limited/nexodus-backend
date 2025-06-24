@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
-final class CreateOtp
+final class CreateOtpAction
 {
     /**
      * Create new otp
      */
-    public function execute(string $email, string $actionClass, ?Closure $callback = null): void
+    public function handle(string $email, string $actionClass, ?Closure $callback = null): void
     {
         $rateLimitKey = "otp:$email:$actionClass";
 

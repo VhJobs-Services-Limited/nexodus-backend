@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Password;
 
-use App\Actions\Otp\OtpInterceptor;
+use App\Actions\Otp\OtpInterceptorAction;
 use App\Dtos\Password\ResetPasswordDto;
 use App\Models\User;
 
@@ -17,7 +17,7 @@ final class ResetPassword
     {
         $account = User::select('id')->where('email', $resetPasswordDto->email)->firstOrFail();
 
-        $otpInterceptor = new OtpInterceptor();
+        $otpInterceptor = new OtpInterceptorAction();
 
         $otpInterceptor->execute($resetPasswordDto->email, ForgetPassword::class, function () use ($resetPasswordDto, $account) {
             $account->update(['password' => $resetPasswordDto->new_password]);
