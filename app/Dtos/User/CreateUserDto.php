@@ -21,7 +21,7 @@ final class CreateUserDto extends BaseDto
     {
         return [
             'fullname' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'username' => ['required', 'string', 'max:255', 'min:3'],
             'phone_number' => ['required', 'string', 'phone:'.request('country'), 'unique:users,phone_number'],
             'email' => ['required', 'email', 'unique:users,email', Rule::exists('email_verifications', 'email')->whereNotNull('verified_at')],
             'password' => ['required', 'string', 'min:8', 'max:100'],
