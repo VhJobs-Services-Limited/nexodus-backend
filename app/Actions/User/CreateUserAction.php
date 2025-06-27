@@ -18,7 +18,7 @@ final class CreateUserAction
         return DB::transaction(function () use ($dto) {
             $verification = EmailVerification::query()->where('email', $dto->email)->firstOrFail();
 
-            $user = User::query()->create(array_merge($dto->toArray(), [
+            $user = User::create(array_merge($dto->toArray(), [
                 'email_verified_at' => $verification->verified_at,
             ]));
 

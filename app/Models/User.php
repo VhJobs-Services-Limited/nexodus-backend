@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 final class User extends Authenticatable
@@ -39,8 +40,13 @@ final class User extends Authenticatable
     protected static function booted(): void
     {
         self::updating(function (self $model) {
-            $id = explode('|', request()->bearerToken())[0];
+            $id = explode('|', request()->bearerToken() ?? '')[0];
             rescue(fn () => cache()->store('file')->forget("PersonalAccessToken::$id::tokenable"));
+        });
+
+        self::creating(function (self $model) {
+            $model->ulid = strtolower(Str::ulid()->toString());
+            $model->referral_code = strtolower(Str::random(4) . Str::random(4));
         });
     }
 
