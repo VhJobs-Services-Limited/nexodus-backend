@@ -45,6 +45,7 @@ final class UserController
             'message' => 'User created successfully',
             'data' => [
                 'token' => $user->createToken($user->email)->plainTextToken,
+                'user' => UserResource::make($user),
             ],
         ], Response::HTTP_CREATED);
     }

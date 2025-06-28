@@ -19,7 +19,7 @@ final class ResetPassword
 
         $otpInterceptor = new OtpInterceptorAction();
 
-        $otpInterceptor->execute($resetPasswordDto->email, ForgetPassword::class, function () use ($resetPasswordDto, $account) {
+        $otpInterceptor->handle($resetPasswordDto->email, ForgetPassword::class, function () use ($resetPasswordDto, $account) {
             $account->update(['password' => $resetPasswordDto->new_password]);
         });
     }
