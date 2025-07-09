@@ -41,6 +41,12 @@ return [
                 'sendpulse' => App\Services\Mail\SendpulseService::class,
             ],
         ],
+        'bill' => [
+            'default' => env('BILL_PROVIDER', 'clubconnect'),
+            'services' => [
+                'clubconnect' => App\Services\Bill\ClubConnectService::class,
+            ],
+        ],
     ],
 
     'sendpulse' => [
@@ -61,5 +67,11 @@ return [
         'api_key' => env('AHASEND_API_KEY'),
         'sender' => env('AHASEND_SENDER', 'no-reply@vhjobs.xyz'),
         'sender_name' => env('AHASEND_SENDER_NAME', env('APP_NAME')),
+    ],
+
+    'clubconnect' => [
+        'base_url' => env('CLUBCONNECT_BASE_URL', ''),
+        'api_key' => env('CLUBCONNECT_API_KEY'),
+        'user_id' => env('CLUBCONNECT_USERID'),
     ],
 ];

@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\AirtimeController;
+use App\Http\Controllers\Api\V1\BettingController;
+use App\Http\Controllers\Api\V1\CableController;
 use App\Http\Controllers\Api\V1\ChangePasswordController;
 use App\Http\Controllers\Api\V1\CreateTransactionPinController;
+use App\Http\Controllers\Api\V1\DataController;
 use App\Http\Controllers\Api\V1\DeleteAccountController;
+use App\Http\Controllers\Api\V1\ElectricityController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ResetPasswordController;
 use App\Http\Controllers\Api\V1\InitiateCreateTransactionPinController;
@@ -46,4 +51,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('transaction-pin', CreateTransactionPinController::class)->name('create.transaction.pin');
 
     Route::post('initiate-transaction-pin', InitiateCreateTransactionPinController::class)->name('initiate.transaction.pin');
+
+    Route::apiResource('airtimes', AirtimeController::class)->only(['index', 'store']);
+
+    Route::apiResource('data', DataController::class)->only(['index', 'store']);
+
+    Route::apiResource('cables', CableController::class)->only(['index', 'store']);
+
+    Route::apiResource('electricity', ElectricityController::class)->only(['index', 'store']);
+
+    Route::apiResource('bettings', BettingController::class)->only(['index', 'store']);
 });

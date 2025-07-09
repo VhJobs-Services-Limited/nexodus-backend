@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\Bill\BillProviderInterface;
 use App\Contracts\Mail\EmailProviderInterface;
 use App\Mail\Transport\CustomEmailTransport;
 use App\Models\PersonalAccessToken;
@@ -28,6 +29,12 @@ final class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(EmailProviderInterface::class, function ($app): EmailProviderInterface {
             $providerClass = config('services.providers.email.services')[config('services.providers.email.default')];
+
+            return $app->make($providerClass);
+        });
+
+        $this->app->bind(BillProviderInterface::class, function ($app): BillProviderInterface {
+            $providerClass = config('services.providers.bill.services')[config('services.providers.bill.default')];
 
             return $app->make($providerClass);
         });
@@ -113,5 +120,7 @@ final class AppServiceProvider extends ServiceProvider
     /**
      * configure application's role and permissions
      */
-    private function configureRoleAndPermissions(): void {}
+    private function configureRoleAndPermissions(): void
+    {
+    }
 }

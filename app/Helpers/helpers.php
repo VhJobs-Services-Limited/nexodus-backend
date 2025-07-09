@@ -36,3 +36,20 @@ if (! function_exists('mysql_error_msg')) {
         };
     }
 }
+
+if (! function_exists('provider_image_url')) {
+    function provider_image_url($code)
+    {
+        return match (strtolower($code)) {
+            'mtn' => asset('images/mtn.png'),
+            'glo' => asset('images/glo.png'),
+            'airtel' => asset('images/airtel.png'),
+            '9mobile' => asset('images/9mobile.png'),
+            'startimes' => asset('images/startimes.png'),
+            'dstv' => asset('images/dstv.png'),
+            'gotv' => asset('images/gotv.png'),
+            'showmax' => asset('images/showmax.png'),
+            default => throw new InvalidArgumentException("Invalid network code: $code"),
+        };
+    }
+}
