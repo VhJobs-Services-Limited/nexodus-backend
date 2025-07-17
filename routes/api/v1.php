@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AirtimeController;
 use App\Http\Controllers\Api\V1\BettingController;
 use App\Http\Controllers\Api\V1\CableController;
 use App\Http\Controllers\Api\V1\ChangePasswordController;
+use App\Http\Controllers\Api\V1\ClubConnectCallbackController;
 use App\Http\Controllers\Api\V1\CreateTransactionPinController;
 use App\Http\Controllers\Api\V1\DataController;
 use App\Http\Controllers\Api\V1\DeleteAccountController;
@@ -38,6 +39,8 @@ Route::get('username-suggestions/{username}', UsernameSuggestionController::clas
 Route::post('register', [UserController::class, 'store']);
 
 Route::post('login', LoginController::class)->name('login');
+
+Route::get('club-connect-callback', ClubConnectCallbackController::class)->name('club.connect.callback');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth', [UserController::class, 'index'])->name('auth');

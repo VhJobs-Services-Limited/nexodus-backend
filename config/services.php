@@ -73,5 +73,6 @@ return [
         'base_url' => env('CLUBCONNECT_BASE_URL', ''),
         'api_key' => env('CLUBCONNECT_API_KEY'),
         'user_id' => env('CLUBCONNECT_USERID'),
+        'callback_url' => env('CLUBCONNECT_CALLBACK_URL', ''),
     ],
 ];

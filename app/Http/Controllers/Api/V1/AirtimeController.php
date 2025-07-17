@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Bill\AirtimePurchaseAction;
 use App\Contracts\Bill\BillProviderInterface;
+use App\DTOs\Bill\AirtimePurchaseDto;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AirtimeController
 {
@@ -19,8 +20,13 @@ class AirtimeController
     /**
      * Create new
      */
-    public function store(Request $request): JsonResponse
+    public function store(AirtimePurchaseDto $dto, AirtimePurchaseAction $action): JsonResponse
     {
-        return response()->json([])->setStatusCode(201);
+        $response = $action->handle($dto);
+
+        return response()->json([
+            'message' => 'Airtime purchase successful',
+            'data' => $response,
+        ])->setStatusCode(201);
     }
 }

@@ -6,6 +6,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasWallet;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +21,7 @@ final class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
+    use HasWallet;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -67,5 +70,13 @@ final class User extends Authenticatable
             'is_active' => 'boolean',
             'is_blocked' => 'boolean',
         ];
+    }
+
+    protected function walletBalance(): Attribute
+    {
+        return Attribute::make(
+            get: fn (int $value) => (float) bcmath('div', [$value, 100], 2),
+            set: fn (float|int $value) => (int) bcmath('mul', [$value, 100], 0)
+        );
     }
 }

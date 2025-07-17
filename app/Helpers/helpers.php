@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+use App\Enums\PaymentStatusEnum;
+use Illuminate\Support\Str;
 
 if (! function_exists('bcmath')) {
     /**
@@ -50,6 +52,25 @@ if (! function_exists('provider_image_url')) {
             'gotv' => asset('images/gotv.png'),
             'showmax' => asset('images/showmax.png'),
             default => throw new InvalidArgumentException("Invalid network code: $code"),
+        };
+    }
+}
+
+if (! function_exists('generate_reference')) {
+    function generate_reference(string $prefix = 'REF'): string
+    {
+        return Str::lower($prefix . '-' . Str::random(10) . '-' . now()->timestamp);
+    }
+}
+
+
+if (! function_exists('get_status')) {
+    function get_status(string $status)
+    {
+        return match (str($status)->lower()->toString()) {
+            'ongoing', 'pending', 'processing', 'queued', 'otp', 'received', 'new', 'order_onhold' => PaymentStatusEnum::Pending->value,
+            'failed', 'reversed', 'blocked', 'abandoned', 'order_cancelled', 'order_error' => PaymentStatusEnum::Failed->value,
+            'success', 'successful', 'order_completed', 'order_processed' => PaymentStatusEnum::Success->value,
         };
     }
 }

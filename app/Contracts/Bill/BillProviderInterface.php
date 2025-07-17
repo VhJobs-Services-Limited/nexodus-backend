@@ -2,6 +2,7 @@
 
 namespace App\Contracts\Bill;
 
+use App\Models\BillTransaction;
 use Illuminate\Support\Collection;
 
 interface BillProviderInterface
@@ -14,4 +15,6 @@ interface BillProviderInterface
     public function getCableProviders(): Collection;
     public function getElectricityProviders(): Collection;
     public function getBettingProviders(): Collection;
+
+    public function purchaseAirtime(BillTransaction $billTransaction): Collection;
 }

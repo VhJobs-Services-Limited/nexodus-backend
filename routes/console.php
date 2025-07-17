@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Contracts\Bill\BillProviderInterface;
+use App\Jobs\ProcessPendingClubConnectRequestJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -19,4 +20,8 @@ Artisan::command('nexodus', function () {
 
 Schedule::command('queue:work --queue=payments,notifications,default')
     ->everyMinute()
+    ->withoutOverlapping();
+
+Schedule::job(new ProcessPendingClubConnectRequestJob())
+    ->everyFifteenMinutes()
     ->withoutOverlapping();

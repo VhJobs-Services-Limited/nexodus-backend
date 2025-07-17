@@ -4,6 +4,7 @@ namespace App\Services\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
 use App\Enums\BillProviderEnum;
+use App\Models\BillTransaction;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
@@ -127,6 +128,36 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function purchaseAirtime(BillTransaction $billTransaction): Collection
+    {
+        $payload = [
+            'MobileNetwork' => $billTransaction->payload['provider_id'],
+            'Amount' => $billTransaction->amount,
+            'MobileNumber' => $billTransaction->payload['phone_number'],
+            'RequestID' => $billTransaction->reference,
+            'CallBackURL' => config('services.clubconnect.callback_url'),
+        ];
+
+        $response = $this->get('/APIAirtimeV1.asp', $payload);
+
+        return $response->collect();
+    }
+
+    public function getOrder(string $orderId): Collection
+    {
+        $response = $this->get('/APIQueryV1.asp', ['OrderID' => $orderId]);
+        return $response->collect();
+    }
+
+    public function cancelOrder(string $orderId): Collection
+    {
+        $response = $this->get('/APICancelV1.asp', ['OrderID' => $orderId]);
+        return $response->collect();
+    }
+
     protected function get(string $url, ?array $payload = []): Response
     {
         $response = Http::acceptJson()->get(config('services.clubconnect.base_url').$url, [
@@ -140,5 +171,18 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
         }
 
         return $response;
+    }
+
+    public function getPercentageCharge(): float
+    {
+        //         01 for MTN @ 3%
+
+        // 02 for GLO @ 8%
+
+        // 04 for Airtel @ 3.2%
+
+        // 03 for 9mobile @ 7%
+
+        return 0.05;
     }
 }

@@ -23,10 +23,10 @@ final class UserResource extends JsonResource
             'phone_number' => $this->phone_number,
             'email' => $this->email,
             'has_pin' => $this->pin ? true : false,
+            'wallet_balance' => $this->wallet_balance,
             'email_verified_at' => $this->email_verified_at?->format('Y-m-d H:i:s'),
             'phone_verified_at' => $this->phone_verified_at?->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-
         ];
     }
 }

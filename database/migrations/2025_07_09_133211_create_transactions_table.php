@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\StatusEnum;
 use App\Enums\TransactionTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,11 +15,11 @@ return new class () extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('amount');
             $table->string('reference')->unique();
             $table->string('description')->nullable();
             $table->enum('transaction_type', TransactionTypeEnum::values())->index();
-            $table->enum('status', ['pending', 'success', 'failed'])->default('pending');
-            $table->bigInteger('amount');
+            $table->enum('status', StatusEnum::values())->default(StatusEnum::PENDING);
             $table->timestamps();
         });
     }
