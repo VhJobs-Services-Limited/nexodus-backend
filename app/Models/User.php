@@ -75,7 +75,7 @@ final class User extends Authenticatable
     protected function walletBalance(): Attribute
     {
         return Attribute::make(
-            get: fn (int $value) => (float) bcmath('div', [$value, 100], 2),
+            get: fn (int|float $value) => (float) bcmath('div', [$value, 100], 2),
             set: fn (float|int $value) => (int) bcmath('mul', [$value, 100], 0)
         );
     }

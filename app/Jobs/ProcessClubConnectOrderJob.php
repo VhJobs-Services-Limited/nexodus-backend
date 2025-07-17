@@ -45,7 +45,7 @@ class ProcessClubConnectOrderJob implements ShouldQueue
         $order = app(ClubConnectService::class)->getOrder($billTransaction->provider_reference);
 
         match ($order->get('status')) {
-            'ORDER_COMPLETED' => $billTransaction->update(['status' => StatusEnum::SUCCESS]),
+            'ORDER_COMPLETED' => $billTransaction->update(['status' => StatusEnum::SUCCESS, 'provider_amount' => $order->get('amountcharged') || 0]),
             'ORDER_ONHOLD' => $billTransaction->update(['last_retried_at' => now()]),
             'ORDER_CANCELLED' => (function () use ($billTransaction) {
                 $billTransaction->update(['status' => StatusEnum::FAILED]);
