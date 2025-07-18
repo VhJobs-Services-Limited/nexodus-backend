@@ -31,13 +31,13 @@ class ProcessClubConnectOrderJob implements ShouldQueue
             return;
         }
 
-        $billTransaction = BillTransaction::select('id', 'transaction_id', 'amount', 'status', 'payload', 'provider_reference', 'reference')->where('reference', $reference)->first();
+        $billTransaction = BillTransaction::select('id', 'transaction_id', 'amount', 'status', 'payload', 'provider_reference', 'reference', 'last_retried_at')->where('reference', $reference)->first();
 
         if (!$billTransaction) {
             return;
         }
 
-        if ($billTransaction->status == get_status($this->payload->get('status'))) {
+        if ($billTransaction->status == get_status($this->payload->get('status')) && !!$billTransaction->last_retried_at) {
             return;
         }
 

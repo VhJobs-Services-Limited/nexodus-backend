@@ -9,12 +9,13 @@ interface BillProviderInterface
 {
     public static function getProviderName(): string;
     public function getWalletBalance(): mixed;
-    public function getAirtimeProviders(): Collection;
-    public function getDataProviders(): Collection;
-    public function getWifiProviders(): Collection;
-    public function getCableProviders(): Collection;
-    public function getElectricityProviders(): Collection;
-    public function getBettingProviders(): Collection;
-
+    public function getAirtimeList(): Collection;
+    public function getDataList(): Collection;
+    public function getWifiList(): Collection;
+    public function getCableList(): Collection;
+    public function getElectricityList(): Collection;
+    public function getBettingList(): Collection;
+    public function billPurchase(BillTransaction $billTransaction, callable $responseFn): BillTransaction;
     public function purchaseAirtime(BillTransaction $billTransaction): Collection;
+    public function purchaseData(BillTransaction $billTransaction): Collection;
 }

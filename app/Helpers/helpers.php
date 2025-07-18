@@ -68,7 +68,7 @@ if (! function_exists('get_status')) {
     function get_status(string $status)
     {
         return match (str($status)->lower()->toString()) {
-            'ongoing', 'pending', 'processing', 'queued', 'otp', 'received', 'new', 'order_onhold' => PaymentStatusEnum::Pending->value,
+            'ongoing', 'pending', 'processing', 'queued', 'otp', 'received', 'new', 'order_onhold','order_received' => PaymentStatusEnum::Pending->value,
             'failed', 'reversed', 'blocked', 'abandoned', 'order_cancelled', 'order_error' => PaymentStatusEnum::Failed->value,
             'success', 'successful', 'order_completed', 'order_processed' => PaymentStatusEnum::Success->value,
         };

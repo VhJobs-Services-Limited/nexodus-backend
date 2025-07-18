@@ -4,10 +4,13 @@ namespace App\Services\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
 use App\Enums\BillProviderEnum;
+use App\Exceptions\ThirdPartyExecption;
+use App\Jobs\RefundJob;
 use App\Models\BillTransaction;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class ClubConnectService extends AbstractProvider implements BillProviderInterface
 {
@@ -32,7 +35,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     /**
      * {@inheritDoc}
      */
-    public function getAirtimeProviders(): Collection
+    public function getAirtimeList(): Collection
     {
         $response = $this->get('/APIAirtimeDiscountV2.asp');
 
@@ -46,7 +49,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     /**
      * {@inheritDoc}
      */
-    public function getDataProviders(): Collection
+    public function getDataList(): Collection
     {
         $response = $this->get('/APIDatabundlePlansV2.asp');
 
@@ -62,7 +65,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
                                 'id' => $product['PRODUCT_ID'],
                                 'name' => $product['PRODUCT_NAME'],
                                 'code' => $product['PRODUCT_CODE'],
-                                'amount' => $product['PRODUCT_AMOUNT'],
+                                'amount' => floor((float) $product['PRODUCT_ID']),
                               ])->values()->all(),
                           ];
                     });
@@ -71,7 +74,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     /**
      * {@inheritDoc}
      */
-    public function getCableProviders(): Collection
+    public function getCableList(): Collection
     {
         $response = $this->get('/APICableTVPackagesV2.asp');
 
@@ -94,7 +97,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     /**
      * {@inheritDoc}
      */
-    public function getWifiProviders(): Collection
+    public function getWifiList(): Collection
     {
         return collect();
     }
@@ -102,7 +105,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     /**
      * {@inheritDoc}
      */
-    public function getElectricityProviders(): Collection
+    public function getElectricityList(): Collection
     {
         $response = $this->get('/APIElectricityDiscosV1.asp');
         return collect($response->collect()->get('ELECTRIC_COMPANY'))
@@ -119,7 +122,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
            });
     }
 
-    public function getBettingProviders(): Collection
+    public function getBettingList(): Collection
     {
         $response = $this->get('/APIBettingCompaniesV2.asp');
         return collect($response->collect()->get('BETTING_COMPANY'))->map(fn ($item) => [
@@ -128,11 +131,38 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
         ]);
     }
 
+
+    public function billPurchase(BillTransaction $billTransaction, callable $responseFn): BillTransaction
+    {
+        try {
+            $response = $responseFn();
+
+            logger()->info('purchase response', ['response' => $response]);
+
+            if (!$response->has('orderid')) {
+                RefundJob::dispatch($billTransaction->transaction);
+                throw new ThirdPartyExecption($response->get('status', 'We are unable to process your request at the moment, please try again later'));
+            }
+
+            return tap($billTransaction, fn ($billTransaction) => $billTransaction->update(['provider_reference' => $response->get('orderid')]));
+        } catch (\Throwable $th) {
+            if ($th instanceof ThirdPartyExecption) {
+                throw $th;
+            }
+
+            logger()->error('purchase error', ['error' => $th]);
+            RefundJob::dispatch($billTransaction->transaction);
+
+            throw new ServiceUnavailableHttpException(100, 'We are unable to process your request at the moment, please try again later');
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
     public function purchaseAirtime(BillTransaction $billTransaction): Collection
     {
+        logger()->info('purchase airtime', ['billTransaction' => $billTransaction]);
         $payload = [
             'MobileNetwork' => $billTransaction->payload['provider_id'],
             'Amount' => $billTransaction->amount,
@@ -142,6 +172,22 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
         ];
 
         $response = $this->get('/APIAirtimeV1.asp', $payload);
+
+        return $response->collect();
+    }
+
+    public function purchaseData(BillTransaction $billTransaction): Collection
+    {
+        $payload = [
+            'MobileNetwork' => $billTransaction->payload['provider_id'],
+            'DataPlan' => $billTransaction->payload['data_id'],
+            'Amount' => $billTransaction->amount,
+            'MobileNumber' => $billTransaction->payload['phone_number'],
+            'RequestID' => $billTransaction->reference,
+            'CallBackURL' => config('services.clubconnect.callback_url'),
+        ];
+
+        $response = $this->get('/APIDatabundleV1.asp', $payload);
 
         return $response->collect();
     }

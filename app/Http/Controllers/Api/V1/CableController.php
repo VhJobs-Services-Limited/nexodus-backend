@@ -13,7 +13,7 @@ class CableController
      */
     public function index(BillProviderInterface $billProvider): JsonResponse
     {
-        return response()->json(['data' => $billProvider->getCableProviders()]);
+        return response()->json(['data' => $billProvider->getCableList()]);
     }
 
     /**

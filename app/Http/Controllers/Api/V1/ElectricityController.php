@@ -13,7 +13,7 @@ class ElectricityController
      */
     public function index(BillProviderInterface $billProvider): JsonResponse
     {
-        return response()->json(['data' => $billProvider->getElectricityProviders()]);
+        return response()->json(['data' => $billProvider->getElectricityList()]);
     }
 
     /**

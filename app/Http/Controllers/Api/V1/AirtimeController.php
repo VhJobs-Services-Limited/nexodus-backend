@@ -14,7 +14,7 @@ class AirtimeController
      */
     public function index(BillProviderInterface $billProvider): JsonResponse
     {
-        return response()->json(['data' => $billProvider->getAirtimeProviders()]);
+        return response()->json(['data' => $billProvider->getAirtimeList()]);
     }
 
     /**
@@ -22,7 +22,7 @@ class AirtimeController
      */
     public function store(AirtimePurchaseDto $dto, AirtimePurchaseAction $action): JsonResponse
     {
-        $response = $action->handle($dto);
+        $response = $action->handle($dto->toArray());
 
         return response()->json([
             'message' => 'Airtime purchase successful',

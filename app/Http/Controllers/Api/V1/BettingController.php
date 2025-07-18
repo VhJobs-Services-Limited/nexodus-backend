@@ -13,7 +13,7 @@ class BettingController
      */
     public function index(BillProviderInterface $bettingProvider): JsonResponse
     {
-        return response()->json(['data' => $bettingProvider->getBettingProviders()]);
+        return response()->json(['data' => $bettingProvider->getBettingList()]);
     }
 
     /**

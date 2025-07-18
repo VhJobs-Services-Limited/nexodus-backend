@@ -14,7 +14,7 @@ Artisan::command('inspire', function () {
 
 Artisan::command('nexodus', function () {
     $billProvider = app(BillProviderInterface::class);
-    $airtimeProviders = $billProvider->getCableProviders();
+    $airtimeProviders = $billProvider->getCableList();
     $this->info("Airtime providers: " . json_encode($airtimeProviders));
 })->purpose('Display the airtime providers');
 

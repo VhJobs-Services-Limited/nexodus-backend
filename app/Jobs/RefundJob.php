@@ -31,7 +31,7 @@ class RefundJob implements ShouldQueue
         $amount = $this->transaction->amount;
 
 
-        $billTransaction = DB::transaction(function () use ($user, $amount) {
+        DB::transaction(function () use ($user, $amount) {
             $user->deposit($amount);
 
             $transaction = Transaction::create([
@@ -51,6 +51,8 @@ class RefundJob implements ShouldQueue
                 'type' => OperationTypeEnum::Credit,
                 'status' => PaymentStatusEnum::Success,
             ]);
+
+            $this->transaction->billTransactions()->update(['status' => StatusEnum::FAILED]);
         });
     }
 }
