@@ -18,4 +18,8 @@ interface BillProviderInterface
     public function billPurchase(BillTransaction $billTransaction, callable $responseFn): BillTransaction;
     public function purchaseAirtime(BillTransaction $billTransaction): Collection;
     public function purchaseData(BillTransaction $billTransaction): Collection;
+    public function verifyBettingAccountId(string $bettingProvider, string $accountId): Collection;
+    public function purchaseBetting(BillTransaction $billTransaction): Collection;
+    public function verifyMetreNumber(string $electricityProvider, string $metreNumber): Collection;
+    public function purchaseElectricity(BillTransaction $billTransaction): Collection;
 }

@@ -192,6 +192,35 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
         return $response->collect();
     }
 
+    public function verifyBettingAccountId(string $bettingProvider, string $accountId): Collection
+    {
+        $response = $this->get('/APIVerifyBettingV1.asp', ['BettingCompany' => $bettingProvider, 'CustomerID' => $accountId]);
+        return $response->collect();
+    }
+
+    public function purchaseBetting(BillTransaction $billTransaction): Collection
+    {
+        $response = $this->get('/APIBettingV1.asp', ['BettingCompany' => $billTransaction->payload['provider_id'], 'CustomerID' => $billTransaction->payload['account_id'], 'Amount' => $billTransaction->amount,  'CallBackURL' => config('services.clubconnect.callback_url')]);
+
+        logger()->info('purchase betting response', ['response' => $response->collect()]);
+
+        return $response->collect();
+    }
+
+    public function verifyMetreNumber(string $electricityProvider, string $metreNumber): Collection
+    {
+        $response = $this->get('/APIVerifyElectricityV1.asp', ['ElectricCompany' => $electricityProvider, 'MeterNo' => $metreNumber]);
+        return $response->collect();
+    }
+
+    public function purchaseElectricity(BillTransaction $billTransaction): Collection
+    {
+        $response = $this->get('/APIElectricityV1.asp', ['ElectricCompany' => $billTransaction->payload['provider_id'], 'MeterType' =>  $billTransaction->payload['metre_type'], 'MeterNo' => $billTransaction->payload['metre_number'], 'Amount' => round($billTransaction->amount), 'PhoneNo' => $billTransaction->payload['phone_number'], 'CallBackURL' => config('services.clubconnect.callback_url')]);
+
+        logger()->info('purchase electricity response', ['response' => $response->collect()]);
+        return $response->collect();
+    }
+
     public function getOrder(string $orderId): Collection
     {
         $response = $this->get('/APIQueryV1.asp', ['OrderID' => $orderId]);
@@ -206,6 +235,11 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
 
     protected function get(string $url, ?array $payload = []): Response
     {
+        logger()->info('get request', [
+            ...$payload,
+            'UserID' => config('services.clubconnect.user_id'),
+            'APIKey' => config('services.clubconnect.api_key'),
+        ]);
         $response = Http::acceptJson()->get(config('services.clubconnect.base_url').$url, [
             ...$payload,
             'UserID' => config('services.clubconnect.user_id'),

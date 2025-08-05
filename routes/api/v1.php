@@ -3,14 +3,16 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\AirtimeController;
-use App\Http\Controllers\Api\V1\BettingController;
+use App\Http\Controllers\Api\V1\Betting\BettingController;
+use App\Http\Controllers\Api\V1\Betting\VerifyBettingAccountController;
 use App\Http\Controllers\Api\V1\CableController;
 use App\Http\Controllers\Api\V1\ChangePasswordController;
 use App\Http\Controllers\Api\V1\ClubConnectCallbackController;
 use App\Http\Controllers\Api\V1\CreateTransactionPinController;
 use App\Http\Controllers\Api\V1\DataController;
 use App\Http\Controllers\Api\V1\DeleteAccountController;
-use App\Http\Controllers\Api\V1\ElectricityController;
+use App\Http\Controllers\Api\V1\Electricity\ElectricityController;
+use App\Http\Controllers\Api\V1\Electricity\VerifyMetreNumberController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ResetPasswordController;
 use App\Http\Controllers\Api\V1\InitiateCreateTransactionPinController;
@@ -64,4 +66,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('electricity', ElectricityController::class)->only(['index', 'store']);
 
     Route::apiResource('bettings', BettingController::class)->only(['index', 'store']);
+
+    Route::group(['prefix' => 'verifications'], function () {
+        Route::post('betting-account', VerifyBettingAccountController::class)->name('betting.account');
+        Route::post('metre-number', VerifyMetreNumberController::class)->name('metre.number');
+    });
 });
