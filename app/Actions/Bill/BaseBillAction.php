@@ -3,7 +3,7 @@
 namespace App\Actions\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
-use App\DTOs\Bill\BaseBillDto;
+use App\Dtos\Bill\BaseBillDto;
 use App\Enums\OperationTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\StatusEnum;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs\Bill;
+namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

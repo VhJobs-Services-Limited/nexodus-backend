@@ -2,7 +2,7 @@
 
 namespace App\Actions\Bill;
 
-use App\DTOs\Bill\BaseBillDto;
+use App\Dtos\Bill\BaseBillDto;
 use App\Enums\BillEnum;
 use App\Models\BillTransaction;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

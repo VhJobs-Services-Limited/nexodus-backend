@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Bill\DataPurchaseAction;
 use App\Contracts\Bill\BillProviderInterface;
-use App\DTOs\Bill\DataPurchaseDto;
+use App\Dtos\Bill\DataPurchaseDto;
 use Illuminate\Http\JsonResponse;
 
 class DataController
