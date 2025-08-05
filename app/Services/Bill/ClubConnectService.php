@@ -217,7 +217,6 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     {
         $response = $this->get('/APIElectricityV1.asp', ['ElectricCompany' => $billTransaction->payload['provider_id'], 'MeterType' =>  $billTransaction->payload['metre_type'], 'MeterNo' => $billTransaction->payload['metre_number'], 'Amount' => round($billTransaction->amount), 'PhoneNo' => $billTransaction->payload['phone_number'], 'CallBackURL' => config('services.clubconnect.callback_url')]);
 
-        logger()->info('purchase electricity response', ['response' => $response->collect()]);
         return $response->collect();
     }
 
@@ -235,11 +234,6 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
 
     protected function get(string $url, ?array $payload = []): Response
     {
-        logger()->info('get request', [
-            ...$payload,
-            'UserID' => config('services.clubconnect.user_id'),
-            'APIKey' => config('services.clubconnect.api_key'),
-        ]);
         $response = Http::acceptJson()->get(config('services.clubconnect.base_url').$url, [
             ...$payload,
             'UserID' => config('services.clubconnect.user_id'),
@@ -255,7 +249,7 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
 
     public function getPercentageCharge(): float
     {
-        //         01 for MTN @ 3%
+        // 01 for MTN @ 3%
 
         // 02 for GLO @ 8%
 
