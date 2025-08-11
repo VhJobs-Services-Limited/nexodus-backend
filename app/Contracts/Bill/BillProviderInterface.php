@@ -13,6 +13,7 @@ interface BillProviderInterface
     public function getDataList(): Collection;
     public function getWifiList(): Collection;
     public function getCableList(): Collection;
+    public function verifyCableSmartCard(string $providerId, string $smartCardNumber): Collection;
     public function getElectricityList(): Collection;
     public function getBettingList(): Collection;
     public function billPurchase(BillTransaction $billTransaction, callable $responseFn): BillTransaction;
@@ -22,4 +23,7 @@ interface BillProviderInterface
     public function purchaseBetting(BillTransaction $billTransaction): Collection;
     public function verifyMetreNumber(string $electricityProvider, string $metreNumber): Collection;
     public function purchaseElectricity(BillTransaction $billTransaction): Collection;
+    public function verifySmileDeviceId(string $providerId, string $deviceId): Collection;
+    public function purchaseWifi(BillTransaction $billTransaction): Collection;
+    public function purchaseCable(BillTransaction $billTransaction): Collection;
 }

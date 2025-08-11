@@ -10,6 +10,6 @@ class VerifyBettingAccountController
     public function __invoke(VerifyBettingAccountDto $dto, VerifyBettingAccountAction $action)
     {
         $result = $action->handle($dto);
-        return response()->json(['message' => 'Betting account verification', 'data' => $result]);
+        return response()->json(['message' => empty($result) ? 'Invalid betting account id' : 'Betting account verified', 'data' => $result], $result ? 200 : 400);
     }
 }

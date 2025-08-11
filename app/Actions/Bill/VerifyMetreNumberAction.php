@@ -11,9 +11,15 @@ class VerifyMetreNumberAction
     {
     }
 
-    public function handle(VerifyMetreNumberDto $dto): mixed
+    public function handle(VerifyMetreNumberDto $dto): string|bool
     {
         $response = $this->provider->verifyMetreNumber($dto->provider_id, $dto->metre_number);
-        return trim($response->get('customer_name')) ?: "Invalid metre number";
+        $customerName = trim($response->get('customer_name'));
+
+        if (str_contains($customerName, 'invalid') || empty($customerName)) {
+            return false;
+        }
+
+        return $customerName;
     }
 }

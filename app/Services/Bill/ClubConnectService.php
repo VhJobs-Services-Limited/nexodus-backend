@@ -9,6 +9,7 @@ use App\Jobs\RefundJob;
 use App\Models\BillTransaction;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Concurrency;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
@@ -99,7 +100,46 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
      */
     public function getWifiList(): Collection
     {
-        return collect();
+        $wifis = [
+            fn () => [
+                'source' => 'smile',
+                'data' => $this->get('/APISmilePackagesV2.asp')->collect(),
+            ],
+            fn () => [
+                'source' => 'spectranet',
+                'data' => $this->get('/APISpectranetPackagesV2.asp')->collect(),
+            ]
+        ];
+
+        $results = Concurrency::run($wifis);
+        $formattedResults = collect($results)->map(function ($result) {
+            $data = match($result['source']) {
+                'smile' => collect($result['data']->get('MOBILE_NETWORK'))->flatten(1)->map(fn ($item) => [
+                    'id' => $item['ID'],
+                    'image_url' => provider_image_url($result['source']),
+                    'name' => $item['ID'],
+                    'products' => collect($item['PRODUCT'])->filter(fn ($product) => $product['PACKAGE_ID'] !== 'airtime')->map(fn ($product) => [
+                        'id' => $product['PACKAGE_ID'],
+                        'name' => $product['PACKAGE_NAME'],
+                        'amount' => $product['PACKAGE_AMOUNT'],
+                    ])->values()->toArray(),
+                ])->first(),
+                'spectranet' => collect($result['data']->get('MOBILE_NETWORK'))->flatten(1)->map(fn ($item) => [
+                     'id' => $item['ID'],
+                    'image_url' => provider_image_url($result['source']),
+                    'name' => $item['ID'],
+                    'products' => collect($item['PRODUCT'])->map(fn ($product) => [
+                        'id' => $product['PACKAGE_ID'],
+                        'name' => $product['PACKAGE_NAME'],
+                        'amount' => $product['PACKAGE_AMOUNT'],
+                    ]),
+                ])->first(),
+            };
+
+            return [$result['source'] => $data];
+        });
+
+        return collect($formattedResults->first())->merge(collect($formattedResults->last()));
     }
 
     /**
@@ -217,6 +257,56 @@ class ClubConnectService extends AbstractProvider implements BillProviderInterfa
     {
         $response = $this->get('/APIElectricityV1.asp', ['ElectricCompany' => $billTransaction->payload['provider_id'], 'MeterType' =>  $billTransaction->payload['metre_type'], 'MeterNo' => $billTransaction->payload['metre_number'], 'Amount' => round($billTransaction->amount), 'PhoneNo' => $billTransaction->payload['phone_number'], 'CallBackURL' => config('services.clubconnect.callback_url')]);
 
+        return $response->collect();
+    }
+
+    public function verifySmileDeviceId(string $providerId, string $deviceId): Collection
+    {
+        $response = $this->get('/APIVerifySmileV1.asp', ['MobileNetwork' => $providerId, 'MobileNumber' => $deviceId]);
+        return $response->collect();
+    }
+
+    public function purchaseWifi(BillTransaction $billTransaction): Collection
+    {
+        $data = match ($billTransaction->payload['provider_id']) {
+            'smile-direct' => [
+                'url' => '/APISmileV1.asp',
+                'params' => [
+                'MobileNetwork' => 'smile-direct',
+                'datatplan' => $billTransaction->payload['plan_id'],
+                'MobileNumber' => $billTransaction->payload['device_id'],
+                'CallBackURL' => config('services.clubconnect.callback_url')
+                ]
+            ],
+            'spectranet' => [
+                'url' => '/APISpectranetV1.asp',
+                'params' => [
+                'MobileNetwork' => 'spectranet',
+                'datatplan' => $billTransaction->payload['plan_id'],
+                'MobileNumber' => $billTransaction->payload['device_id'],
+                'CallBackURL' => config('services.clubconnect.callback_url')
+                ]
+            ],
+        };
+        $response = $this->get($data['url'], $data['params']);
+        return $response->collect();
+    }
+    public function purchaseCable(BillTransaction $billTransaction): Collection
+    {
+        $response = $this->get('/APICableTVV1.asp', [
+                'CableTV' => $billTransaction->payload['provider_id'],
+                'Package' => $billTransaction->payload['package_id'],
+                'SmartCardNo' => $billTransaction->payload['smart_card_number'],
+                'PhoneNo' => $billTransaction->payload['phone_number'],
+                'CallBackURL' => config('services.clubconnect.callback_url')
+                ]);
+
+        return $response->collect();
+    }
+
+    public function verifyCableSmartCard(string $providerId, string $smartCardNumber): Collection
+    {
+        $response = $this->get('/APIVerifyCableTVV1.0.asp', ['cabletv' => $providerId, 'smartcardno' => $smartCardNumber]);
         return $response->collect();
     }
 

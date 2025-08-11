@@ -5,7 +5,8 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\V1\AirtimeController;
 use App\Http\Controllers\Api\V1\Betting\BettingController;
 use App\Http\Controllers\Api\V1\Betting\VerifyBettingAccountController;
-use App\Http\Controllers\Api\V1\CableController;
+use App\Http\Controllers\Api\V1\Cable\CableController;
+use App\Http\Controllers\Api\V1\Cable\VerifyCableSmartCardController;
 use App\Http\Controllers\Api\V1\ChangePasswordController;
 use App\Http\Controllers\Api\V1\ClubConnectCallbackController;
 use App\Http\Controllers\Api\V1\CreateTransactionPinController;
@@ -22,6 +23,8 @@ use App\Http\Controllers\Api\V1\Registration\UsernameSuggestionController;
 use App\Http\Controllers\Api\V1\Registration\VerifyEmailController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VerifyOtpController;
+use App\Http\Controllers\Api\V1\Wifi\VerifySmileDeviceController;
+use App\Http\Controllers\Api\V1\Wifi\WifiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => response()->json('Hello world'));
@@ -67,8 +70,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('bettings', BettingController::class)->only(['index', 'store']);
 
+    Route::apiResource('wifi', WifiController::class)->only(['index']);
+
     Route::group(['prefix' => 'verifications'], function () {
         Route::post('betting-account', VerifyBettingAccountController::class)->name('betting.account');
         Route::post('metre-number', VerifyMetreNumberController::class)->name('metre.number');
+        Route::post('smile-device', VerifySmileDeviceController::class)->name('smile.device');
+        Route::post('cable-smart-card', VerifyCableSmartCardController::class)->name('cable.smart.card');
     });
 });

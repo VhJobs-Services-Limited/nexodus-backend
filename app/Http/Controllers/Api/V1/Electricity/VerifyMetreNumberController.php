@@ -10,6 +10,6 @@ class VerifyMetreNumberController
     public function __invoke(VerifyMetreNumberDto $dto, VerifyMetreNumberAction $action)
     {
         $result = $action->handle($dto);
-        return response()->json(['message' => 'Metre number verification', 'data' => $result]);
+        return response()->json(['message' => empty($result) ? 'Invalid metre number' : 'Metre number verified', 'data' => $result], $result ? 200 : 400);
     }
 }

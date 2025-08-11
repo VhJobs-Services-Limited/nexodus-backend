@@ -51,6 +51,8 @@ if (! function_exists('provider_image_url')) {
             'dstv' => asset('images/dstv.png'),
             'gotv' => asset('images/gotv.png'),
             'showmax' => asset('images/showmax.png'),
+            'smile' => asset('images/smile.png'),
+            'spectranet' => asset('images/spectranet.png'),
             default => throw new InvalidArgumentException("Invalid network code: $code"),
         };
     }
