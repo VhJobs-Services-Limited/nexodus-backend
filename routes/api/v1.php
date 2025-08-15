@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\LoginController;
 use App\Http\Controllers\Api\V1\Registration\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Registration\UsernameSuggestionController;
 use App\Http\Controllers\Api\V1\Registration\VerifyEmailController;
+use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VerifyOtpController;
 use App\Http\Controllers\Api\V1\Wifi\VerifySmileDeviceController;
@@ -71,6 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('bettings', BettingController::class)->only(['index', 'store']);
 
     Route::apiResource('wifi', WifiController::class)->only(['index']);
+
+    Route::apiResource('transactions', TransactionController::class)->only(['index', 'show']);
 
     Route::group(['prefix' => 'verifications'], function () {
         Route::post('betting-account', VerifyBettingAccountController::class)->name('betting.account');
