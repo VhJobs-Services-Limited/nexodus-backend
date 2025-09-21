@@ -15,7 +15,6 @@ use App\Models\Transaction;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Concurrency;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -81,7 +80,13 @@ final class OxProcessingService extends AbstractProvider implements ExchangePric
             ];
         });
 
-        $response = Concurrency::run($func->all());
+        if ($func->count() > 10) {
+            throw new BadRequestHttpException('Can not process more than 10 coins at a time');
+        }
+
+        set_time_limit(intval(0.5 * $func->count()) * 60);
+
+        $response = collect($func->all())->map(fn ($item) => $item());
 
         return collect($response)->map(fn ($item) => [
             'symbol' => $item['symbol'],
