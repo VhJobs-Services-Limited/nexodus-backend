@@ -19,10 +19,6 @@ Artisan::command('nexodus', function () {
     $this->info('Airtime providers: '.json_encode($airtimeProviders));
 })->purpose('Display the airtime providers');
 
-Schedule::command('queue:work --queue=payments,notifications,default')
-    ->everyMinute()
-    ->withoutOverlapping();
-
 Schedule::job(new ProcessPendingClubConnectRequestJob())
     ->everyFifteenMinutes()
     ->withoutOverlapping();
