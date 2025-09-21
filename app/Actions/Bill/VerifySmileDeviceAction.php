@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\VerifySmileDeviceDto;
 
-class VerifySmileDeviceAction
+final class VerifySmileDeviceAction
 {
-    public function __construct(protected BillProviderInterface $provider)
-    {
-    }
+    public function __construct(protected BillProviderInterface $provider) {}
 
     public function handle(VerifySmileDeviceDto $dto): string|bool
     {

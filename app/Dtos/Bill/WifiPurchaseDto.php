@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class WifiPurchaseDto extends BaseDto
+final class WifiPurchaseDto extends BaseDto
 {
     public string $provider_id;
     public string $device_id;

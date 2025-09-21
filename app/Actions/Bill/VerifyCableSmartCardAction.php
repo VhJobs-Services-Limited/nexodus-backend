@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\VerifyCableSmartCardDto;
 
-class VerifyCableSmartCardAction
+final class VerifyCableSmartCardAction
 {
-    public function __construct(protected BillProviderInterface $provider)
-    {
-    }
+    public function __construct(protected BillProviderInterface $provider) {}
 
     public function handle(VerifyCableSmartCardDto $dto): string|bool
     {

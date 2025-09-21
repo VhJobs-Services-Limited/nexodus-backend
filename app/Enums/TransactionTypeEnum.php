@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 enum TransactionTypeEnum: string
@@ -9,6 +11,8 @@ enum TransactionTypeEnum: string
     case WITHDRAW = 'withdraw';
     case DEPOSIT = 'deposit';
     case TRANSFER = 'transfer';
+
+    case CRYPTO = 'crypto';
 
     public static function values(): array
     {

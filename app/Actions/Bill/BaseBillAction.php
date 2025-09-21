@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Bill;
 
 use App\Contracts\Bill\BillProviderInterface;
@@ -15,9 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 abstract class BaseBillAction
 {
-    public function __construct(protected BillProviderInterface $provider)
-    {
-    }
+    public function __construct(protected BillProviderInterface $provider) {}
 
     abstract public function handle(array $dto): BillTransaction;
 

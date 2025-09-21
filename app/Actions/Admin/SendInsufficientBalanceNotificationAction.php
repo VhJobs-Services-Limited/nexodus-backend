@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Mail\InsufficientBalanceMail;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -16,7 +17,7 @@ final class SendInsufficientBalanceNotificationAction
 
     public function handle(float $currentBalance, float $requiredAmount, string $providerName): void
     {
-        $rateLimitKey = self::RATE_LIMIT_KEY . ':' . $providerName;
+        $rateLimitKey = self::RATE_LIMIT_KEY.':'.$providerName;
 
         // Check if we've already sent a notification recently
         if (RateLimiter::tooManyAttempts($rateLimitKey, self::MAX_ATTEMPTS)) {
@@ -27,6 +28,7 @@ final class SendInsufficientBalanceNotificationAction
                 'required_amount' => $requiredAmount,
                 'rate_limit_key' => $rateLimitKey,
             ]);
+
             return;
         }
 
@@ -37,6 +39,7 @@ final class SendInsufficientBalanceNotificationAction
                 'admin_email' => $adminEmail,
                 'provider' => $providerName,
             ]);
+
             return;
         }
 
@@ -56,7 +59,7 @@ final class SendInsufficientBalanceNotificationAction
                 'current_balance' => $currentBalance,
                 'required_amount' => $requiredAmount,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             logger()->error('Failed to send insufficient balance notification', [
                 'admin_email' => $adminEmail,
                 'provider' => $providerName,

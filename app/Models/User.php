@@ -19,9 +19,9 @@ final class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
+    use HasWallet;
     use Notifiable;
     use SoftDeletes;
-    use HasWallet;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,8 +48,8 @@ final class User extends Authenticatable
         });
 
         self::creating(function (self $model) {
-            $model->ulid = strtolower(Str::ulid()->toString());
-            $model->referral_code = strtolower(Str::random(4) . Str::random(4));
+            $model->ulid = mb_strtolower(Str::ulid()->toString());
+            $model->referral_code = mb_strtolower(Str::random(4).Str::random(4));
         });
     }
 
@@ -75,8 +75,8 @@ final class User extends Authenticatable
     protected function walletBalance(): Attribute
     {
         return Attribute::make(
-            get: fn (int|float|null $value) => $value ? (float) bcmath('div', [$value, 100], 2) : null,
-            set: fn (float|int $value) => (int) bcmath('mul', [$value, 100], 0)
+            get: fn (int|float|null $value) => $value === 0 ? $value : (float) bcmath('div', [$value, 100], 2),
+            set: fn (float|int $value) => $value === 0 ? $value : (int) bcmath('mul', [$value, 100], 0)
         );
     }
 }

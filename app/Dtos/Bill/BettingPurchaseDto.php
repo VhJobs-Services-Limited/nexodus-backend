@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class BettingPurchaseDto extends BaseDto
+final class BettingPurchaseDto extends BaseDto
 {
     public string|int $amount;
     public string $provider_id;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1\Electricity;
 
 use App\Actions\Bill\ElectricityPurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\ElectricityPurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class ElectricityController
+final class ElectricityController
 {
     /**
      * Get all

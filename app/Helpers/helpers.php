@@ -13,7 +13,6 @@ if (! function_exists('bcmath')) {
      */
     function bcmath(string $operation, array $values, int $scale = 3): string
     {
-
         return array_reduce(array_slice($values, 1), fn ($carry, $item) => match ($operation) {
             'add' => bcadd($carry, (string) $item, $scale),
             'sub' => bcsub($carry, (string) $item, $scale),
@@ -42,7 +41,7 @@ if (! function_exists('mysql_error_msg')) {
 if (! function_exists('provider_image_url')) {
     function provider_image_url($code)
     {
-        return match (strtolower($code)) {
+        return match (mb_strtolower($code)) {
             'mtn' => asset('images/mtn.png'),
             'glo' => asset('images/glo.png'),
             'airtel' => asset('images/airtel.png'),
@@ -61,10 +60,9 @@ if (! function_exists('provider_image_url')) {
 if (! function_exists('generate_reference')) {
     function generate_reference(string $prefix = 'REF'): string
     {
-        return Str::lower($prefix . '-' . Str::random(10) . '-' . now()->timestamp);
+        return Str::lower($prefix.'-'.Str::random(10).'-'.now()->timestamp);
     }
 }
-
 
 if (! function_exists('get_status')) {
     function get_status(string $status)

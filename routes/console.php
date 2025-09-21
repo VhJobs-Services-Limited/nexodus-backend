@@ -7,6 +7,7 @@ use App\Jobs\ProcessPendingClubConnectRequestJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use Spatie\WebhookClient\Models\WebhookCall;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -15,7 +16,7 @@ Artisan::command('inspire', function () {
 Artisan::command('nexodus', function () {
     $billProvider = app(BillProviderInterface::class);
     $airtimeProviders = $billProvider->getCableList();
-    $this->info("Airtime providers: " . json_encode($airtimeProviders));
+    $this->info('Airtime providers: '.json_encode($airtimeProviders));
 })->purpose('Display the airtime providers');
 
 Schedule::command('queue:work --queue=payments,notifications,default')
@@ -25,3 +26,7 @@ Schedule::command('queue:work --queue=payments,notifications,default')
 Schedule::job(new ProcessPendingClubConnectRequestJob())
     ->everyFifteenMinutes()
     ->withoutOverlapping();
+
+Schedule::command('model:prune', [
+    '--model' => [WebhookCall::class],
+])->daily();

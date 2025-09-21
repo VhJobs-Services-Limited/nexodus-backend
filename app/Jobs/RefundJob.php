@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Enums\OperationTypeEnum;
@@ -11,16 +13,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 
-class RefundJob implements ShouldQueue
+final class RefundJob implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(public Transaction $transaction)
-    {
-    }
+    public function __construct(public Transaction $transaction) {}
 
     /**
      * Execute the job.
@@ -29,7 +29,6 @@ class RefundJob implements ShouldQueue
     {
         $user = $this->transaction->user;
         $amount = $this->transaction->amount;
-
 
         DB::transaction(function () use ($user, $amount) {
             $user->deposit($amount);

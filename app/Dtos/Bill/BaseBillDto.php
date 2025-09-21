@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use App\Enums\BillEnum;
 use Illuminate\Validation\Rule;
 
-class BaseBillDto extends BaseDto
+final class BaseBillDto extends BaseDto
 {
     public float|int $amount;
     public string $description;

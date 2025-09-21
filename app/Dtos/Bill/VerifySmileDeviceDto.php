@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class VerifySmileDeviceDto extends BaseDto
+final class VerifySmileDeviceDto extends BaseDto
 {
     public string $provider_id;
     public string $device_id;

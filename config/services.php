@@ -47,6 +47,22 @@ return [
                 'clubconnect' => App\Services\Bill\ClubConnectService::class,
             ],
         ],
+        'crypto' => [
+            'exchange_provider' => [
+                'default' => env('CRYPTO_EXCHANGE_PROVIDER', 'oxprocessing'),
+                'services' => [
+                    'freecryptoapi' => App\Services\Crypto\FreeCryptoApiService::class,
+                    'fixer' => App\Services\Crypto\FixerApiService::class,
+                    'oxprocessing' => App\Services\Crypto\OxProcessingService::class,
+                ],
+            ],
+            'gateway_provider' => [
+                'default' => env('CRYPTO_GATEWAY_PROVIDER', 'oxprocessing'),
+                'services' => [
+                    'oxprocessing' => App\Services\Crypto\OxProcessingService::class,
+                ],
+            ],
+        ],
     ],
 
     'sendpulse' => [
@@ -74,5 +90,22 @@ return [
         'api_key' => env('CLUBCONNECT_API_KEY'),
         'user_id' => env('CLUBCONNECT_USERID'),
         'callback_url' => env('CLUBCONNECT_CALLBACK_URL', ''),
+    ],
+
+    'freecryptoapi' => [
+        'base_url' => env('FREE_CRYPTO_API_BASE_URL', ''),
+        'api_key' => env('FREE_CRYPTO_API_KEY'),
+    ],
+
+    'fixer' => [
+        'base_url' => env('FIXER_BASE_URL', ''),
+        'api_key' => env('FIXER_API_KEY'),
+    ],
+
+    'oxprocessing' => [
+        'base_url' => env('OXPROCESSING_BASE_URL', ''),
+        'api_key' => env('OXPROCESSING_API_KEY'),
+        'merchant_id' => env('OXPROCESSING_MERCHANT_ID'),
+        'webhook_password' => env('OXPROCESSING_WEBHOOK_PASSWORD'),
     ],
 ];

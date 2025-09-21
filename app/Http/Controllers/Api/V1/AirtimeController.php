@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Bill\AirtimePurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\AirtimePurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class AirtimeController
+final class AirtimeController
 {
     /**
      * Get all

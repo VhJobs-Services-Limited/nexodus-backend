@@ -14,9 +14,11 @@
         "laravel/tinker": "^2.9",
         "opcodesio/log-viewer": "^3.8",
         "propaganistas/laravel-phone": "^6.0",
+        "spatie/fork": "^1.2",
         "spatie/laravel-permission": "^6.3",
         "spatie/laravel-query-builder": "^6.0",
         "spatie/laravel-responsecache": "*",
+        "spatie/laravel-webhook-client": "^3.4",
         "wendelladriel/laravel-validated-dto": "^4.0"
     },
     "require-dev": {

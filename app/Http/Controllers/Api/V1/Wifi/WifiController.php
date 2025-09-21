@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1\Wifi;
 
 use App\Actions\Bill\DataPurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\WifiPurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class WifiController
+final class WifiController
 {
     /**
      * Get all

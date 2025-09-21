@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Bill\DataPurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\DataPurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class DataController
+final class DataController
 {
     /**
      * Get all

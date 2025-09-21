@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Bill;
 
 use App\Actions\Admin\SendInsufficientBalanceNotificationAction;
@@ -15,7 +17,7 @@ abstract class AbstractProvider implements BillProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function hasEnoughBalance(float|int $amount): bool
+    final public function hasEnoughBalance(float|int $amount): bool
     {
         $currentBalance = $this->getWalletBalance();
         $hasEnoughBalance = $currentBalance >= $amount;
@@ -32,6 +34,7 @@ abstract class AbstractProvider implements BillProviderInterface
 
         return $hasEnoughBalance;
     }
+
     protected function errorHandler(Response $response)
     {
         $status = $response->status();

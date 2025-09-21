@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1\Betting;
 
 use App\Actions\Bill\BettingPurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\BettingPurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class BettingController
+final class BettingController
 {
     /**
      * Get all

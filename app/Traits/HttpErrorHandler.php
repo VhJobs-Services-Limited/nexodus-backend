@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits;
 
 use Exception;
@@ -15,6 +17,10 @@ trait HttpErrorHandler
         $notFoundError = [404];
         $clientErrors = range(400, 499);
         $serverErrors = range(500, 599);
+
+        if (app()->environment(['local', 'staging', 'dev'])) {
+            logger('status: ', [$response->collect()]);
+        }
 
         return match (true) {
             in_array($status, $notFoundError) => throw new NotFoundHttpException($response->collect()->get('message') ?? 'The provider resource was not found'),

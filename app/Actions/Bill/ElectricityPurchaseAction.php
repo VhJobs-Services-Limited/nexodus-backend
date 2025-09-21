@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Bill;
 
 use App\Dtos\Bill\BaseBillDto;
 use App\Enums\BillEnum;
 use App\Models\BillTransaction;
 
-class ElectricityPurchaseAction extends BaseBillAction
+final class ElectricityPurchaseAction extends BaseBillAction
 {
     public function handle(array $dto): BillTransaction
     {

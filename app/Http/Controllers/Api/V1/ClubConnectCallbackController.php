@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Jobs\ProcessClubConnectOrderJob;
 use Illuminate\Http\Request;
 
-class ClubConnectCallbackController
+final class ClubConnectCallbackController
 {
-    /**
-     *
-     */
     public function __invoke(Request $request)
     {
-        ProcessClubConnectOrderJob::dispatch(collect(["reference" => $request->get('requestid'), "status" => $request->get('orderstatus')]));
+        ProcessClubConnectOrderJob::dispatch(collect(['reference' => $request->get('requestid'), 'status' => $request->get('orderstatus')]));
 
         return response()->json(['message' => 'Order received']);
     }

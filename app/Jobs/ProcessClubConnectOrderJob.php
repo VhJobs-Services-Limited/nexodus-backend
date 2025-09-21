@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Enums\StatusEnum;
@@ -9,16 +11,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Collection;
 
-class ProcessClubConnectOrderJob implements ShouldQueue
+final class ProcessClubConnectOrderJob implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(public Collection $payload)
-    {
-    }
+    public function __construct(public Collection $payload) {}
 
     /**
      * Execute the job.
@@ -27,20 +27,19 @@ class ProcessClubConnectOrderJob implements ShouldQueue
     {
         $reference = $this->payload->get('reference');
 
-        if (!$reference) {
+        if (! $reference) {
             return;
         }
 
         $billTransaction = BillTransaction::select('id', 'transaction_id', 'amount', 'status', 'payload', 'provider_reference', 'reference', 'last_retried_at')->where('reference', $reference)->first();
 
-        if (!$billTransaction) {
+        if (! $billTransaction) {
             return;
         }
 
-        if ($billTransaction->status == get_status($this->payload->get('status')) && !!$billTransaction->last_retried_at) {
+        if ($billTransaction->status === get_status($this->payload->get('status')) && (bool) $billTransaction->last_retried_at) {
             return;
         }
-
 
         $order = app(ClubConnectService::class)->getOrder($billTransaction->provider_reference);
 

@@ -100,11 +100,16 @@ final class Transaction extends Model
         return $query;
     }
 
+    public function cryptoTransactions(): HasMany
+    {
+        return $this->hasMany(CryptoTransaction::class);
+    }
+
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn (int|float $value) => (float) bcmath('div', [$value, 100], 2),
-            set: fn (float|int $value) => (int) bcmath('mul', [$value, 100], 0)
+            get: fn (int|float $value) => $value === 0 ? $value : (float) bcmath('div', [$value, 100], 2),
+            set: fn (float|int $value) => $value === 0 ? $value : (int) bcmath('mul', [$value, 100], 0)
         );
     }
 }

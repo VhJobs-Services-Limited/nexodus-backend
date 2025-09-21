@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1\Cable;
 
 use App\Actions\Bill\CablePurchaseAction;
@@ -7,7 +9,7 @@ use App\Contracts\Bill\BillProviderInterface;
 use App\Dtos\Bill\CablePurchaseDto;
 use Illuminate\Http\JsonResponse;
 
-class CableController
+final class CableController
 {
     /**
      * Get all

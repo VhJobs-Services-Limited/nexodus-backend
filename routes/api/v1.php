@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\DataController;
 use App\Http\Controllers\Api\V1\DeleteAccountController;
 use App\Http\Controllers\Api\V1\Electricity\ElectricityController;
 use App\Http\Controllers\Api\V1\Electricity\VerifyMetreNumberController;
+use App\Http\Controllers\Api\V1\ExchangeRateController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\ForgetPassword\ResetPasswordController;
 use App\Http\Controllers\Api\V1\InitiateCreateTransactionPinController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\Api\V1\LoginController;
 use App\Http\Controllers\Api\V1\Registration\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Registration\UsernameSuggestionController;
 use App\Http\Controllers\Api\V1\Registration\VerifyEmailController;
+use App\Http\Controllers\Api\V1\SellCryptoController;
+use App\Http\Controllers\Api\V1\SettingController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VerifyOtpController;
@@ -29,6 +32,7 @@ use App\Http\Controllers\Api\V1\Wifi\WifiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => response()->json('Hello world'));
+Route::post('/', fn () => response()->json('Hello world'));
 
 Route::post('email-verification', EmailVerificationController::class)->middleware('throttle:otp')->name('email.verification');
 
@@ -81,4 +85,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('smile-device', VerifySmileDeviceController::class)->name('smile.device');
         Route::post('cable-smart-card', VerifyCableSmartCardController::class)->name('cable.smart.card');
     });
+
+    Route::group(['prefix' => 'crypto'], function () {
+        Route::apiResource('exchange-rates', ExchangeRateController::class)->only(['index', 'show']);
+        Route::post('sell', SellCryptoController::class)->name('sell.crypto');
+    });
+
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+});
+
+Route::prefix('webhook')->group(function () {
+    Route::webhooks('oxprocessing', 'oxprocessing-webhook');
 });

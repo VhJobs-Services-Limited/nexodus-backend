@@ -16,9 +16,7 @@ final class SendLoginNotificationJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public User $user, public string $ipAddress, public string $userAgent, public string $timestamp)
-    {
-    }
+    public function __construct(public User $user, public string $ipAddress, public string $userAgent, public string $timestamp) {}
 
     public function handle(): void
     {

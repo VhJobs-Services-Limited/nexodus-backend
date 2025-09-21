@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dtos\Bill;
 
 use App\Dtos\BaseDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class VerifyMetreNumberDto extends BaseDto
+final class VerifyMetreNumberDto extends BaseDto
 {
     public string $provider_id;
     public string $metre_number;

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Bill\BillProviderInterface;
+use App\Contracts\Crypto\ExchangePriceInterface;
+use App\Contracts\Crypto\GatewayProviderInterface;
 use App\Contracts\Mail\EmailProviderInterface;
 use App\Mail\Transport\CustomEmailTransport;
 use App\Models\PersonalAccessToken;
@@ -38,6 +40,19 @@ final class AppServiceProvider extends ServiceProvider
 
             return $app->make($providerClass);
         });
+
+        $this->app->bind(ExchangePriceInterface::class, function ($app): ExchangePriceInterface {
+            $providerClass = config('services.providers.crypto.exchange_provider.services')[config('services.providers.crypto.exchange_provider.default')];
+
+            return $app->make($providerClass);
+        });
+
+        $this->app->bind(GatewayProviderInterface::class, function ($app): GatewayProviderInterface {
+            $providerClass = config('services.providers.crypto.gateway_provider.services')[config('services.providers.crypto.gateway_provider.default')];
+
+            return $app->make($providerClass);
+        });
+
     }
 
     /**
@@ -120,7 +135,5 @@ final class AppServiceProvider extends ServiceProvider
     /**
      * configure application's role and permissions
      */
-    private function configureRoleAndPermissions(): void
-    {
-    }
+    private function configureRoleAndPermissions(): void {}
 }
