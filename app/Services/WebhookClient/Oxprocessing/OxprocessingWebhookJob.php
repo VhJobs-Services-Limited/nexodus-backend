@@ -12,13 +12,6 @@ use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
 
 final class OxprocessingWebhookJob extends ProcessWebhookJob
 {
-    /**
-     * The name of the queue the job should be sent to.
-     *
-     * @var string
-     */
-    public $queue = 'payments';
-
     public function handle(OxProcessingService $oxProcessingService)
     {
         $payload = $this->webhookCall?->payload;
